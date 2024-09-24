@@ -6,16 +6,22 @@ const FULCRUM_PORT = parseInt(process.env.FULCRUM_PORT) || 50001;
 const rpcClient = new ElectrumClient(FULCRUM_PORT, FULCRUM_HOST, "tcp");
 
 async function getVersion() {
-  const initClient = await rpcClient.initElectrum({
-    client: "umbrel",
-    version: "1.4"
-  });
+  // initElectrum() also requests the server version
+  // If tried to connect via the initElectrum(), the first time works,
+  // But henceforth Fulcrum will give error as it does not like 
+  // server version to be requested again in the same connection
+  // Hence connect() will be used instead.
+  await rpcClient.connect()
 
+  const versionInfo= await rpcClient.server_version("umbrel","1.4")
   // versionInfo[0] comes in as fulcrum/0.9.4, so we parse
-  const version = initClient.versionInfo[0].substring(
-    initClient.versionInfo[0].indexOf("/") + 1
+  const version = versionInfo[0].substring(
+    versionInfo[0].indexOf("/") + 1
   );
-  initClient.close()
+  
+  // Close the connection, otherwise the next request for verion will give error 
+  await rpcClient.close()
+  
   return version;
 }
 
@@ -30,16 +36,13 @@ async function syncPercent() {
     return 0;
   }
 
-  // if not IBD, then check bitcoind height to fulcrum height
-  const initClient = await rpcClient.initElectrum({
-    client: "umbrel",
-    version: "1.4"
-  });
+  // Similar to getversion() above.
+  await rpcClient.connect()
 
   const {
     height: fulcrumHeight
-  } = await initClient.blockchainHeaders_subscribe();
-  initClient.close()
+  } = await rpcClient.blockchainHeaders_subscribe();
+
   return (fulcrumHeight / bitcoindResponse.blocks) * 100;
 }
 
