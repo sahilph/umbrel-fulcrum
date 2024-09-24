@@ -42,7 +42,9 @@ async function syncPercent() {
   const {
     height: fulcrumHeight
   } = await rpcClient.blockchainHeaders_subscribe();
-
+  
+  await rpcClient.close()
+  
   return (fulcrumHeight / bitcoindResponse.blocks) * 100;
 }
 
