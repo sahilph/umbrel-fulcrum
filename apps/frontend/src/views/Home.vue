@@ -37,7 +37,7 @@
           <span class="align-self-end ml-1">Synchronized</span>
         </span>
         <span v-else class="animate-pulse">
-          Waiting for Bitcoin Node to finish syncing...
+          Fulcrum is currently indexing, which may take some time...
         </span>
       </h3>
     </div>
