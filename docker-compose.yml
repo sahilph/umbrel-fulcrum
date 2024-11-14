@@ -3,6 +3,8 @@ version: "3.7"
 services:
   app:
     build: .
+    depends_on:
+      - fulcrum
     command: npm run dev:backend
     restart: on-failure
     environment:
@@ -15,17 +17,17 @@ services:
     ports:
       - "3006:3006"
   fulcrum:
-    image: getumbrel/fulcrum:v0.9.4@sha256:b1590ac6cfb0e5b481c6a7af7f0626d76cbb91c63702b0f5c47e2829e9c37997
+    image: cculianu/fulcrum:v1.11.1@sha256:70f06b93ab5863997992d4b4508312fe81ce576017e16ecc7e69c7d38165bdf2
     environment:
-      FULCRUM_LOG_FILTERS: "INFO"
-      FULCRUM_NETWORK: "regtest"
-      FULCRUM_DAEMON_RPC_ADDR: "bitcoind:18443"
-      FULCRUM_DAEMON_P2P_ADDR: "bitcoind:18444"
-      FULCRUM_ELECTRUM_RPC_ADDR: "0.0.0.0:50001"
-      FULCRUM_SERVER_BANNER: "Umbrel Fulcrum"
-      FULCRUM_COOKIE_FILE: "/bitcoin/regtest/.cookie"
+      TCP: 0.0.0.0:50001
+      ADMIN: 0.0.0.0:8000
+      BITCOIND: bitcoind:18443
+      RPCUSER: umbrel
+      RPCPASSWORD: moneyprintergobrrr
+      PEERING: "false"
+      ANNOUNCE: "false"
+    command: Fulcrum _ENV_
     volumes:
-      - ${PWD}/data/bitcoin:/bitcoin
       - ${PWD}/data/fulcrum:/data
     restart: always
     ports:
