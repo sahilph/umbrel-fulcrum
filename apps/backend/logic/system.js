@@ -3,7 +3,7 @@ const NodeError = require("models/errors.js").NodeError;
 
 async function getElectrumConnectionDetails() {
   try {
-    const port = constants.ELECTRUM_PORT;
+    const port = constants.ELECTRUM_PUBLIC_CONNECTION_PORT;
 
     const torAddress = constants.ELECTRUM_HIDDEN_SERVICE;
     const torConnectionString = `${torAddress}:${port}:t`;

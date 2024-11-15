@@ -32,23 +32,27 @@
 
     <div class="flex justify-end mb-2">
       <h3 class="font-semibold mb-0 text-gray-800 dark:text-gray-200">
-        <span v-if="syncPercent > 0">
-          <span> {{ syncPercent >= 99.99 ? 100 : Number(syncPercent).toFixed(0) }}%</span>
+        <!-- Case 1: Bitcoin Node still syncing -->
+        <span v-if="syncPercent === -1" class="animate-pulse">
+          Waiting for Bitcoin Node to finish syncing...
+        </span>
+        <!-- Case 2: Normal sync progress -->
+        <span v-else-if="syncPercent >= 0">
+          <span>{{ syncPercent >= 99.99 ? 100 : Number(syncPercent).toFixed(0) }}%</span>
           <span class="align-self-end ml-1">Synchronized</span>
         </span>
+        <!-- Case 3: Waiting for Fulcrum response -->
         <span v-else class="animate-pulse">
-          Fulcrum is currently indexing, which may take some time...
+          Connecting to Fulcrum server...
         </span>
       </h3>
     </div>
     <progress-bar
-      :percentage="syncPercent"
+      :percentage="progressBarPercentage"
       colorClass="bg-green-400"
       class="h-2"
     ></progress-bar>
-
     <connection-information />
-
   </div>
 </template>
 
@@ -70,6 +74,10 @@ export default {
         return state.fulcrum.syncPercent;
       },
     }),
+    progressBarPercentage() {
+      // Clamp the value between 0 and 100 so that -1 and -2 are not displayed as 100%
+      return Math.max(0, Math.min(100, this.syncPercent));
+    }
   },
   methods:  {
     fetchData() {

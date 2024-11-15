@@ -10,10 +10,12 @@ services:
     environment:
       ELECTRUM_HIDDEN_SERVICE: "somehiddenserviceurl.onion"
       ELECTRUM_LOCAL_SERVICE: "umbrel.local"
-      FULCRUM_HOST: fulcrum
+      ELECTRUM_HOST: fulcrum
+      ELECTRUM_PUBLIC_CONNECTION_PORT: 50001
       BITCOIN_HOST: bitcoind
       RPC_USER: umbrel
       RPC_PASSWORD: moneyprintergobrrr
+      RPC_PORT: 18443
     ports:
       - "3006:3006"
   fulcrum:
@@ -38,5 +40,3 @@ services:
     volumes:
       - ${PWD}/data/bitcoin:/data/.bitcoin
     restart: on-failure
-    ports:
-      - "18443:18443"
