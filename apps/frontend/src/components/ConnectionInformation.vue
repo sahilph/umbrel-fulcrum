@@ -1,8 +1,11 @@
 <template>
   <div class="mt-16">
-    <p class="mb-8 text-neutral-900 dark:text-neutral-300 text-lg">
+    <p class="mb-1 text-neutral-900 dark:text-neutral-300 text-lg">
       Use the following details to connect your wallet or application to
       Fulcrum.
+    </p>
+    <p class="mb-8 text-sm text-neutral-600 dark:text-neutral-400">
+      Connections will only be available once Fulcrum has completed syncing.
     </p>
     <div class="flex flex-col md:grid md:grid-cols-12 md:gap-8">
       <div
