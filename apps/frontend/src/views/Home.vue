@@ -41,7 +41,11 @@
           <span>{{ syncPercent >= 99.99 ? 100 : Number(syncPercent).toFixed(0) }}%</span>
           <span class="align-self-end ml-1">Synchronized</span>
         </span>
-        <!-- Case 3: Waiting for Fulcrum response -->
+        <!-- Case 3: Fatal error in Fulcrum -->
+        <span v-else-if="syncPercent === -3" class="text-red-500">
+          Database error - Please reinstall app or delete database and restart app to resync
+        </span>
+        <!-- Case 4: Waiting for Fulcrum response -->
         <span v-else class="animate-pulse">
           Connecting to Fulcrum server...
         </span>

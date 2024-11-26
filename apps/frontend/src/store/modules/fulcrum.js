@@ -10,6 +10,7 @@ const state = () => ({
   },
   // -1: Bitcoin node is still syncing
   // -2: Fulcrum connection failed
+  // -3: Fulcrum database is corrupted
   // >= 0: Fulcrum sync percent
   syncPercent: -2,
 });

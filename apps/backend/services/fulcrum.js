@@ -111,7 +111,18 @@ async function getLogSyncStatus() {
   // [2024-11-16 05:21:59.953] <Controller> Processed height: 1000, 10.0%, 4119.3 blocks/
 
   const percentageMatch = latestLine.match(/(\d+), ([\d.]+)%/);
-  if (!percentageMatch) throw new Error('No sync percentage found in logs');
+  if (!percentageMatch) {
+    // Check for any FATAL level logs, which indicate database corruption
+    // This most commonly occurs when fulcrum is killed uncleanly, so the logs will likely be new and short
+    const hasFatalError = lines.some(line => 
+      line.includes('FATAL:')
+    );
+    
+    if (hasFatalError) {
+      return -3;
+    }
+    throw new Error('No sync percentage found in logs');
+  }
   
   const percentage = percentageMatch[2];
   console.log('sync percentage from logs', percentage);
