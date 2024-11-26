@@ -22,6 +22,8 @@ services:
       - ${PWD}/data/fulcrum-logs:/fulcrum-logs
   fulcrum:
     image: cculianu/fulcrum:v1.11.1@sha256:70f06b93ab5863997992d4b4508312fe81ce576017e16ecc7e69c7d38165bdf2
+    init: true
+    stop_grace_period: 1m
     environment:
       TCP: 0.0.0.0:50001
       ADMIN: 0.0.0.0:8000
